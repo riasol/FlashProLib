@@ -1,0 +1,385 @@
+<project name="FlexTasks">
+	<property file="../../variables.properties" />
+	<macrodef name="mxml2swf3" description="Kompilacja mxml dla flex3+">
+		<attribute name="sdk" />
+		<attribute name="module" />
+		<attribute name="srcDir" />
+		<attribute name="appDir" />
+		<attribute name="destDir" />
+		<attribute name="cmdLine" default="" />
+		<sequential>
+			<java jar="@{sdk}\lib\mxmlc.jar"
+			      dir="@{sdk}\frameworks"
+			      fork="true"
+			      failonerror="true">
+				<arg line="
+					-load-config  '@{sdk}\frameworks\flex-config.xml'
+					-allow-source-path-overlap=true
+					-o '@{destDir}/@{module}.swf'
+					'@{srcDir}/@{module}.mxml'
+					@{cmdLine}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="aircompile">
+		<attribute name="sdk" />
+		<attribute name="module" />
+		<attribute name="srcDir" />
+		<attribute name="destDir" />
+		<attribute name="cmdLine" default="" />
+		<sequential>
+			<java jar="@{sdk}\lib\mxmlc.jar"
+			      dir="@{sdk}\frameworks"
+			      fork="true"
+			      failonerror="true">
+				<arg line="+configname=air -load-config  '@{sdk}\frameworks\air-config.xml'
+			-o '@{destDir}/@{module}.swf'
+			-file-specs '@{srcDir}/@{module}.mxml'
+			-source-path+='@{sdk}\frameworks'
+			@{cmdLine}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="as2swf3" description="Kompilacja *.as dla flex3+">
+		<attribute name="sdk" />
+		<attribute name="module" />
+		<attribute name="srcDir" />
+		<attribute name="destDir" />
+		<attribute name="cmdLine" default="" />
+		<sequential>
+			<java jar="@{sdk}\lib\mxmlc.jar"
+			      dir="@{sdk}\frameworks"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-load-config  '@{sdk}\frameworks\flex-config.xml'
+			-o '@{destDir}/@{module}.swf'
+			-file-specs '@{srcDir}/@{module}.as'
+			@{cmdLine}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="compilecss" description="Kompilacja css dla flex3+">
+		<attribute name="cmdLine" default="--help" />
+		<attribute name="sdk" />
+		<sequential>
+			<java jar="@{sdk}\lib\mxmlc.jar"
+			      dir="@{sdk}\frameworks"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-load-config  '@{sdk}\frameworks\flex-config.xml'	@{cmdLine}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="updateFlexAppVersion" description="Update time string">
+		<attribute name="filePath" default="src/as" />
+		<attribute name="version" />
+		<sequential>
+			<tstamp>
+				<format pattern="dd-MM-yyyy HH:mm:ss"
+				        property="COMPILE_TSTAMP" />
+			</tstamp>
+			<copy file="@{filePath}/_CompileInfo.as"
+			      overwrite="true"
+			      tofile="@{filePath}/CompileInfo.as"
+			      encoding="utf-8">
+				<filterset>
+					<filter token="COMPILE_INFO_STRING"
+					        value=" @{version}${COMPILE_TSTAMP}" />
+				</filterset>
+			</copy>
+		</sequential>
+	</macrodef>
+	<macrodef name="swfstruct"
+	          description="create xml struct of swf via swfmill">
+		<attribute name="swf" />
+		<attribute name="out" default="@{swf}.xml" />
+		<sequential>
+			<exec executable="${swfmill}">
+				<arg line="swf2xml" />
+				<arg line="@{swf}" />
+				<arg line="@{out}" />
+			</exec>
+		</sequential>
+	</macrodef>
+	<macrodef name="extract_symbols"
+	          description="extract symbols using swfmill output">
+		<attribute name="xml" />
+		<attribute name="swf" />
+		<attribute name="outdir" />
+		<sequential>
+			<xslt style="${workspace}/FlashProLib/src/symbols.xsl"
+			      in="@{xml}"
+			      out="@{outdir}/symbols.txt" />
+			<property file="@{outdir}/symbols.txt" />
+			<For list="${symbols}" param="s">
+				<sequential>
+					<echo message="symbol @{s}" />
+					<exec executable="${swfextract}">
+						<arg line="-i" />
+						<arg line="@{s}" />
+						<arg line="-o" />
+						<arg line="@{outdir}/@{s}.swf" />
+						<arg line="@{swf}" />
+					</exec>
+				</sequential>
+			</For>
+			<exec executable="${php5.bin}">
+				<arg line="${workspace}/FlashProLib/src/symbolsNameChange.php" />
+				<arg line="@{xml}" />
+				<arg line="@{outdir}" />
+			</exec>
+		</sequential>
+	</macrodef>
+	<!--
+	Using: <target name="export_pb">
+		<export_pb input="${basedir}/"/>
+	</target>
+	-->
+	<macrodef name="export_pb">
+		<attribute name="inputFile" />
+		<attribute name="outputFile" default="@{inputFile}.pbj" />
+		<sequential>
+			<exec executable="${pbutil}">
+				<arg line="@{inputFile}" />
+				<arg line="@{outputFile}" />
+			</exec>
+		</sequential>
+	</macrodef>
+	<target name="copy_locale">
+		<exec executable="${flex.sdk}/bin/copylocale.exe">
+			<arg line="en_US pl_PL" />
+		</exec>
+	</target>
+	<!--
+	Using: <target name="resample">
+		<resample_sound input="${basedir}/path.mp3"/>
+	</target>
+	-->
+	<macrodef name="resample_sound">
+		<attribute name="input" />
+		<attribute name="frequency" default="22.05" />
+		<!-- or 44,100 -->
+		<sequential>
+			<copy file="@{input}" tofile="@{input}~">
+			</copy>
+			<exec executable="${lame}">
+				<arg line="--mp3input --resample @{frequency}" />
+				<arg line="@{input}~" />
+				<arg line="@{input}" />
+			</exec>
+			<delete file="@{input}~" />
+		</sequential>
+	</macrodef>
+	<!--
+		Using: <target name="convert2mp3">
+			<convert2mp3 input="${basedir}/path.mp3"/>
+		</target>
+		-->
+	<macrodef name="convert2mp3">
+		<attribute name="input" />
+		<attribute name="frequency" default="22.05" />
+		<!-- or 44,100 -->
+		<sequential>
+			<exec executable="${lame}">
+				<arg line="--resample @{frequency}" />
+				<arg line="@{input}" />
+				<arg line="@{input}.mp3" />
+			</exec>
+		</sequential>
+	</macrodef>
+	<!--
+		Using: <target name="scale_volume">
+			<scale_volume input="${basedir}/path.mp3"/>
+		</target>
+		-->
+	<macrodef name="scale_volume">
+		<attribute name="input" />
+		<attribute name="scale" default="1.5" />
+		<sequential>
+			<copy file="@{input}" tofile="@{input}~">
+			</copy>
+			<exec executable="${lame}">
+				<arg line="--mp3input --scale @{scale} --silent" />
+				<arg line="'@{input}~'" />
+				<arg line="'@{input}'" />
+			</exec>
+			<delete file="@{input}~" />
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_package">
+		<attribute name="sdk" />
+		<attribute name="directory" />
+		<attribute name="output" />
+		<attribute name="descriptor" />
+		<attribute name="swf" />
+		<attribute name="files" />
+		<attribute name="publisher" />
+		<sequential>
+			<java dir="@{directory}"
+			      classname="com.qnx.bbt.airpackager.BarAirPackager"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarDeploy.jar;@{sdk}/lib/BarAir.jar;@{sdk}/lib/BarPackager.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-package	'@{output}'" />
+				<arg line="-publisher	@{publisher}" />
+				<arg line="'@{descriptor}'" />
+				<arg line="'@{swf}'" />
+				<arg line="@{files}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_launch">
+		<attribute name="sdk" />
+		<attribute name="bar" />
+		<attribute name="ip" />
+		<attribute name="password" />
+		<sequential>
+			<java classname="com.qnx.bbt.airpackager.BarAirPackager"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarDeploy.jar;@{sdk}/lib/BarAir.jar;@{sdk}/lib/BarPackager.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-installApp" />
+				<arg line="-launchApp" />
+				<arg line="-device @{ip}" />
+				<arg line="-password @{password}" />
+				<arg line="@{bar}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_install_token">
+		<attribute name="sdk" />
+		<attribute name="bar" />
+		<attribute name="ip" />
+		<attribute name="password" />
+		<sequential>
+			<!--blackberry-deploy -installDebugToken <path to debug token> -device <IP address of tablet> -password <tablet password>-->
+			<java classname="com.qnx.bbt.airpackager.BarAirPackager"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarDeploy.jar;@{sdk}/lib/BarAir.jar;@{sdk}/lib/BarPackager.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-installDebugToken" />
+				<arg line="'${user.home}/Research In Motion/@{bar}'" />
+				<arg line="-device @{ip}" />
+				<arg line="-password @{password}" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_uninstall">
+		<attribute name="sdk" />
+		<attribute name="bar" />
+		<attribute name="ip" />
+		<attribute name="password" />
+		<sequential>
+			<java classname="com.qnx.bbt.airpackager.BarAirPackager"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarDeploy.jar;@{sdk}/lib/BarAir.jar;@{sdk}/lib/BarPackager.jar"
+			      fork="true"
+			      failonerror="true">
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_sign">
+		<attribute name="sdk" />
+		<attribute name="cskpass" />
+		<attribute name="storepass" />
+		<attribute name="bar" />
+		<sequential>
+			<!---verbose -cskpass <your CSK password>
+    -keystore <your P12 file> -storepass <your P12 file password>
+    <BAR_file.bar> RDK-->
+			<java classname="net.rim.device.codesigning.barsigner.BarSigner"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarPackager.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-verbose" />
+				<arg line="-cskpass @{cskpass}" />
+				<arg line="-keystore '${user.home}/Research In Motion/1.p12'" />
+				<arg line="-storepass @{storepass}" />
+				<arg line="@{bar} RDK" />
+			</java>
+			<!---keystore <your P12 file> -storepass <your p12 file password>
+    <BAR_file.bar> author-->
+			<java classname="net.rim.device.codesigning.barsigner.BarSigner"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarPackager.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-keystore '${user.home}/Research In Motion/1.p12'" />
+				<arg line="-storepass @{storepass}" />
+				<arg line="@{bar} author" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_token_create">
+		<attribute name="sdk" />
+		<attribute name="cskpass" />
+		<attribute name="csjpin" />
+		<attribute name="csjFile" />
+		<attribute name="storepass" />
+		<attribute name="deviceId" />
+		<attribute name="tokenFileBar" />
+		<sequential>
+			<java classname="net.rim.device.codesigning.debugtoken.DebugTokenRequest"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarPackager.jar;@{sdk}/lib/DebugTokenRequest.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-verbose" />
+				<arg line="-cskpass @{cskpass}" />
+				<arg line="-keystore '${user.home}/Research In Motion/1.p12'" />
+				<arg line="-storepass @{storepass}" />
+				<arg line="-deviceId 0x@{deviceId}" />
+				<arg line="'${user.home}/Research In Motion/@{tokenFileBar}'" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="playbook_token_prepare_pc">
+		<attribute name="sdk" />
+		<attribute name="cskpass" />
+		<attribute name="csjpin" />
+		<attribute name="csjFile" />
+		<attribute name="storepass" />
+		<attribute name="deviceId" />
+		<attribute name="tokenFileBar" />
+		<sequential>
+			<java classname="net.rim.device.codesigning.debugtoken.DebugTokenRequest"
+			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarPackager.jar;@{sdk}/lib/DebugTokenRequest.jar"
+			      fork="true"
+			      failonerror="true">
+				<arg line="-verbose" />
+				<arg line="-register" />
+				<arg line="-cskpass @{cskpass}" />
+				<arg line="-csjpin @{csjpin}" />
+				<arg line="'${user.home}/Research In Motion/@{csjFile}'" />
+			</java>
+		</sequential>
+	</macrodef>
+	<macrodef name="ios_ipa_create">
+		<attribute name="sdk" />
+		<attribute name="srcDir" /> 
+		<attribute name="appName" />
+		<attribute name="targetDir" />
+		<attribute name="provisioning" />
+		<attribute name="keystore" />
+		<attribute name="storepass" />
+
+		<sequential>
+			<java jar="@{sdk}/lib/adt.jar" fork="true" failonerror="true">
+				<arg value="-package" />
+				<arg value="-target" />
+				<arg value="ipa-test" />
+				<arg value="-provisioning-profile" />
+				<arg value="@{provisioning}" />
+				<arg value="-storetype" />
+				<arg value="pkcs12" />
+				<arg value="-keystore" />
+				<arg value="@{keystore}" />
+				<arg value="-storepass" />
+				<arg value="@{storepass}" />
+				<arg value="@{targetDir}/@{appName}.ipa" />
+				<arg value="@{srcDir}/@{appName}-app.xml" />
+				<arg value="-C" />
+				<arg value="@{targetDir}" />
+				<arg value="@{targetDir}/@{appName}.swf" />
+			</java>
+		</sequential>
+
+	</macrodef>
+</project>

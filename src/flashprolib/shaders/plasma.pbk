@@ -1,0 +1,63 @@
+<languageVersion : 1.0;>
+
+kernel PlasmaEffect
+< namespace : "com.mrdoob.shaders";
+vendor : "Mr.doob";
+version : 1;
+description : "Good old plasma effect";
+>
+{
+output pixel4 dst;
+input image4 src;
+
+parameter float distort
+<
+minValue:float(0.0);
+maxValue:float(0.1);
+defaultValue:float(0.0);
+>;
+
+parameter float2 offset
+<
+minValue:float2(-100,-100);
+maxValue:float2(100,100);
+defaultValue:float2(0,0);
+>;
+
+parameter float3 color_offset
+<
+minValue:float3(-5,-5,-5);
+maxValue:float3(5,5,5);
+defaultValue:float3(0,0,0);
+>;
+
+parameter float2 wave
+<
+minValue:float2(0,0);
+maxValue:float2(0.1,0.1);
+defaultValue:float2(0.05,0.05);
+>;
+parameter float speed
+<
+minValue:float(1);
+maxValue:float(7.0);
+defaultValue:float(3.0);
+>;
+
+
+void evaluatePixel()
+{
+float2 size=pixelSize(src);
+float2 center=size*0.5;
+float2 pos = outCoord();
+
+float2 dist = pos - center;
+float distance = sqrt((dist.x * dist.x) + (dist.y * dist.y)) * distort;
+
+float color = cos((offset.x + pos.x*speed) * wave.x) + sin((offset.y + pos.y*speed) * wave.y) + sin(distance) + cos(distance);
+pixel4 sampled = sampleNearest(src,outCoord());
+sampled.r -=0.5;sampled.g -=0.5;sampled.b -=0.5;
+float alpha=min(sampled.a,1.0);
+dst = pixel4(color + color_offset.x, color + color_offset.y, color + color_offset.z, alpha*(color + color_offset.z));
+}
+}

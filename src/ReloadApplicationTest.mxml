@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+	creationComplete="evComplete()"
+	>
+	<mx:Script>
+		<![CDATA[
+			import amu.site.tool.reload.Version;
+			public var objectVersion:String='v1';
+			private function evComplete():void{
+				var versionComparator:Version=new Version(this)
+				versionComparator.timeout=10000
+				if(versionComparator.compare('v0')){
+					trace('version ok')
+				}else if(!versionComparator.compare('v1')){
+					versionComparator.reload()
+				}else{
+					versionComparator.reload()
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:Application>

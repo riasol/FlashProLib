@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="FlashProLib.mxml" projectUUID="6047e2d2-8cbb-45be-a545-1525f3c4af75" version="6">
+  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="false" copyDependentFiles="false" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+    <compilerSourcePath>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${WORKSPACE}/CMS2Flex/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${WORKSPACE}/AS3Library/lib/flash"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${WORKSPACE}/AS3Library/lib/tweener"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="${WORKSPACE}/FlashProLib/playbook_substitutes"/>
+    </compilerSourcePath>
+    <libraryPath defaultLinkType="0">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="/Cairngorm/bin/Cairngorm.swc" useDefaultLinkType="false"/>
+    </libraryPath>
+    <sourceAttachmentPath/>
+  </compiler>
+  <applications>
+    <application path="FlashProLib.mxml"/>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+  <publishSource>
+    <sourcePathIncludes/>
+    <sourceExcludes>
+      <exclude path="dist"/>
+      <exclude path="doc"/>
+      <exclude path="libs"/>
+      <exclude path="src/amu"/>
+      <exclude path="src/flashprolib/algoritms"/>
+      <exclude path="src/flashprolib/apis"/>
+      <exclude path="src/flashprolib/assetloader"/>
+      <exclude path="src/flashprolib/commands"/>
+      <exclude path="src/flashprolib/containers"/>
+      <exclude path="src/flashprolib/controls"/>
+      <exclude path="src/flashprolib/data"/>
+      <exclude path="src/flashprolib/debug"/>
+      <exclude path="src/flashprolib/effects"/>
+      <exclude path="src/flashprolib/filters"/>
+      <exclude path="src/flashprolib/fix"/>
+      <exclude path="src/flashprolib/flexx"/>
+      <exclude path="src/flashprolib/formatters"/>
+      <exclude path="src/flashprolib/history"/>
+      <exclude path="src/flashprolib/indicators"/>
+      <exclude path="src/flashprolib/locale"/>
+      <exclude path="src/flashprolib/offects"/>
+      <exclude path="src/flashprolib/particles"/>
+      <exclude path="src/flashprolib/scenes"/>
+      <exclude path="src/flashprolib/shaders"/>
+      <exclude path="src/flashprolib/sounds"/>
+      <exclude path="src/flashprolib/test"/>
+      <exclude path="src/flashprolib/text"/>
+      <exclude path="src/flashprolib/util/framejump"/>
+      <exclude path="src/flashprolib/util/AddressingUtils.as"/>
+      <exclude path="src/flashprolib/util/Assert.as"/>
+      <exclude path="src/flashprolib/util/CoreUtils.as"/>
+      <exclude path="src/flashprolib/util/DataTransform.as"/>
+      <exclude path="src/flashprolib/util/Delay.as"/>
+      <exclude path="src/flashprolib/util/DisplayUtils.as"/>
+      <exclude path="src/flashprolib/util/DrawingUtils.as"/>
+      <exclude path="src/flashprolib/util/IoUtils.as"/>
+      <exclude path="src/flashprolib/util/MathExtensions.as"/>
+      <exclude path="src/flashprolib/util/MatrixTransformer.as"/>
+      <exclude path="src/flashprolib/util/PrimitivesSource.as"/>
+      <exclude path="src/flashprolib/util/RegexpShortcuts.as"/>
+      <exclude path="src/flashprolib/util/ScrollableDisplayObject.as"/>
+      <exclude path="src/flashprolib/util/ScrollableDynamicButtonDecorator.as"/>
+      <exclude path="src/flashprolib/util/ScrollableGround.as"/>
+      <exclude path="src/flashprolib/util/SimpleSharedObject.as"/>
+      <exclude path="src/flashprolib/util/SimpleUpDown.as"/>
+      <exclude path="src/flashprolib/util/StopOnFrames.as"/>
+      <exclude path="src/flashprolib/util/StringExtensions.as"/>
+      <exclude path="src/flashprolib/util/SystemUtils.as"/>
+      <exclude path="src/flashprolib/util/ThreeDUtils.as"/>
+      <exclude path="src/locale"/>
+      <exclude path="src/test"/>
+      <exclude path="src/build.xml"/>
+      <exclude path="src/crossdomain.xml"/>
+      <exclude path="src/FlashProLib.mxml"/>
+      <exclude path="src/FlexSiteTests.mxml"/>
+      <exclude path="src/ReloadApplicationLoaderTest.mxml"/>
+      <exclude path="src/ReloadApplicationModuleTest.mxml"/>
+      <exclude path="src/ReloadApplicationTest.mxml"/>
+      <exclude path="src/symbols.xsl"/>
+      <exclude path="src/symbolsNameChange.php"/>
+      <exclude path="build.xml"/>
+      <exclude path="FlashProLib build.xml scale_volume.launch"/>
+    </sourceExcludes>
+  </publishSource>
+</actionScriptProperties>

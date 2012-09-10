@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="evComplete()">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import amu.site.tool.reload.Version;
+			public var objectVersion:String='v1';
+			private var l:Loader
+			private function evComplete():void {
+				l=new Loader()
+				l.load(new URLRequest('/test/Flex3Site/Loaded.swf'))
+				l.contentLoaderInfo.addEventListener(Event.COMPLETE, evLoaded)
+				var uiC:UIComponent=new UIComponent()
+				addChild(uiC)
+				uiC.addChild(l)
+			}
+			private function evLoaded(e:Event):void {
+				var versionComparator:Version=new Version(l)
+				versionComparator.timeout=5000
+				if(!versionComparator.compare('v1')) {
+					versionComparator.reload()
+				} else {
+					//another actions on load
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:Application>

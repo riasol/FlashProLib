@@ -1,0 +1,27 @@
+<cairngorm:ServiceLocator
+	 xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:cairngorm="http://www.adobe.com/2006/cairngorm"
+	 >
+	 <mx:RemoteObject
+		 id="SiteService"
+		 endpoint="/modules/amfphp2/gateway.php"
+		 destination="cms2.SiteService"
+		 source="cms2.SiteService"
+	makeObjectsBindable="true"
+	showBusyCursor="true" 
+	invoke="ServiceProgress.getInstance().callStart()"
+	result="ServiceProgress.getInstance().callFinish()"
+	fault="ServiceProgress.getInstance().callFinish()"
+	/>
+	<mx:RemoteObject
+		id="LogService"
+		endpoint="/modules/amfphp2/gateway.php"
+		destination="cms2.LogService"
+		source="cms2.LogService"
+		/>
+	<mx:Script>
+		<![CDATA[
+			import amu.site.view.ServiceProgress;
+		]]>
+	</mx:Script>
+   </cairngorm:ServiceLocator>

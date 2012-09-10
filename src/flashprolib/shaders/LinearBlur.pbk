@@ -1,0 +1,62 @@
+<languageVersion : 1.0;>
+
+kernel LinearBlur
+<   namespace : "amu";
+    vendor : "AMU";
+    version : 1;
+    description : "Blur wg zakresów dla osi x,y";
+>
+{
+    
+    parameter float2 imageSize
+    <minValue:float2(2.0,2.0);
+    maxValue:float2(3000.0,3000.0);
+    defaultValue:float2(500.0,500.0);
+    >;
+    parameter float2 xRange
+    <minValue:float2(0.0,0.0);
+    maxValue:float2(10.0,10.0);
+    defaultValue:float2(0.0,2.0);
+    >;
+    parameter float2 yRange
+    <minValue:float2(0.0,0.0);
+    maxValue:float2(10.0,10.0);
+    defaultValue:float2(0.0,2.0);
+    >;
+    input image4 src;
+    output pixel4 dst;
+
+    void
+    evaluatePixel()
+    {
+        float denominator = 0.0;
+        
+        float2 radius=float2(xRange[0]+(xRange[1]-xRange[0])*outCoord().x/imageSize.x,yRange[0]+(yRange[1]-yRange[0])*outCoord().y/imageSize.y);
+       float4 colorAccumulator = float4(0.0, 0.0, 0.0, 0.0); 
+       float scale=float(0.5);
+        //sampleNearest(src,outCoord());
+        colorAccumulator +=sampleNearest(src,outCoord());
+        //denominator++;
+        if(outCoord().x>0.0){
+        colorAccumulator +=sampleNearest(src,float2(outCoord().x-radius.x,outCoord().y))*scale;
+        denominator++;
+        }
+        if(outCoord().y>0.0){
+        colorAccumulator +=sampleNearest(src,float2(outCoord().x,outCoord().y-radius.y))*scale;
+        denominator++;
+        }
+        if(outCoord().x<xRange[0]){
+        colorAccumulator +=sampleNearest(src,float2(outCoord().x+radius.x,outCoord().y))*scale;
+        denominator++;
+        }
+        if(outCoord().y<yRange[1]){
+        colorAccumulator +=sampleNearest(src,float2(outCoord().x,outCoord().y+radius.y))*scale;
+        denominator++;
+        }
+        
+        colorAccumulator/=denominator;
+        colorAccumulator.a=1.0;
+        dst = colorAccumulator;
+        //+float2(xRange)
+    }
+}

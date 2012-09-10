@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of FlashProLib</title>
+	<nodes>
+		<node label="src">
+			<node icon="packageIcon" label="flashprolib.collector" expanded="true">
+				<node icon="actionScriptIcon" label="Collector.as" url="source/flashprolib/collector/Collector.as.html"/>
+				<node icon="actionScriptIcon" label="CollectorKeyListener.as" url="source/flashprolib/collector/CollectorKeyListener.as.html"/>
+				<node icon="actionScriptIcon" label="ICollectionOutput.as" url="source/flashprolib/collector/ICollectionOutput.as.html"/>
+				<node icon="actionScriptIcon" label="TraceOutput.as" url="source/flashprolib/collector/TraceOutput.as.html"/>
+			</node>
+			<node icon="packageIcon" label="flashprolib.util" expanded="true">
+				<node icon="actionScriptIcon" label="ArrayExtensions.as" url="source/flashprolib/util/ArrayExtensions.as.html"/>
+			</node>
+		</node>
+	</nodes>
+	<zipfile label="Download source (ZIP, 5K)" url="FlashProLib.zip">
+	</zipfile>
+	<sdklink label="Download Flex SDK" url="http://www.adobe.com/go/flex4_sdk_download">
+	</sdklink>
+</index>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>FlashProLib</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.flexnature</nature>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] flash</name>
+			<type>2</type>
+			<locationURI>WORKSPACE/AS3Library/lib/flash</locationURI>
+		</link>
+		<link>
+			<name>[source path] src</name>
+			<type>2</type>
+			<locationURI>WORKSPACE/CMS2Flex/src</locationURI>
+		</link>
+		<link>
+			<name>[source path] tweener</name>
+			<type>2</type>
+			<locationURI>WORKSPACE/AS3Library/lib/tweener</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
