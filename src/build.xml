@@ -26,13 +26,14 @@
 		<attribute name="module" />
 		<attribute name="srcDir" />
 		<attribute name="destDir" />
+		<attribute name="configname" default="air" />
 		<attribute name="cmdLine" default="" />
 		<sequential>
 			<java jar="@{sdk}\lib\mxmlc.jar"
 			      dir="@{sdk}\frameworks"
 			      fork="true"
 			      failonerror="true">
-				<arg line="+configname=air -load-config  '@{sdk}\frameworks\air-config.xml'
+				<arg line="+configname=@{configname} -load-config  '@{sdk}\frameworks\@{configname}-config.xml'
 			-o '@{destDir}/@{module}.swf'
 			-file-specs '@{srcDir}/@{module}.mxml'
 			-source-path+='@{sdk}\frameworks'
