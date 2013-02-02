@@ -221,10 +221,10 @@
 			      classpath="@{sdk}/lib/EccpressoJDK15ECC.jar;@{sdk}/lib/EccpressoAll.jar;@{sdk}/lib/BarSigner.jar;@{sdk}/lib/BarDeploy.jar;@{sdk}/lib/BarAir.jar;@{sdk}/lib/BarPackager.jar"
 			      fork="true"
 			      failonerror="true">
-				<arg line="-package	'@{output}'" />
+				<arg line="-package	'@{output}' '@{descriptor}' '@{directory}/bar-descriptor.xml'" />
 				<arg line="-publisher	@{publisher}" />
-				<arg line="'@{descriptor}'" />
 				<arg line="'@{swf}'" />
+				<arg line="'@{descriptor}'" />
 				<arg line="@{files}" />
 			</java>
 		</sequential>
